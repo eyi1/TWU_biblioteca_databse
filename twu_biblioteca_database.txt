@@ -1,0 +1,44 @@
+q1:
+SELECT name 
+FROM member 
+INNER JOIN checkout_item on member.id = checkout_item.member_id 
+INNER JOIN book 
+ON checkout_item.book_id = book.id where book.title = 'The Hobbit';
+
+q2:
+SELECT COUNT(id) 
+FROM member 
+WHERE id 
+NOT IN (SELECT member_id FROM checkout_item);				 
+
+q3:
+SELECT * 
+FROM book 
+WHERE book.id 
+NOT IN (SELECT book_id FROM checkout_item where book_id is NOT null)
+UNION
+SELECT * 
+FROM movie 
+WHERE movie.id 
+NOT IN (SELECT movie_id FROM checkout_item where movie_id is NOT null);
+
+q4:
+INSERT INTO book (title) values ("The Pragmatic Programmer");
+INSERT INTO member (name) values ("EJ Yi");
+INSERT INTO checkout_item (member_id, book_id) VALUES (43, 11);
+
+SELECT name 
+FROM member 
+INNER JOIN checkout_item on member.id = checkout_item.member_id 
+INNER JOIN book 
+ON checkout_item.book_id = book.id where book.title = "The Pragmatic Programmer";
+
+q5:
+SELECT name 
+FROM (SELECT member_id 
+FROM checkout_item 
+GROUP BY member_id 
+HAVING count(*) > 1
+) as x 
+INNER JOIN member 
+ON member.id = x.member_id;
